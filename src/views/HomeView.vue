@@ -1,29 +1,30 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue'
 import { getTodo } from '../api'
 import type { TodoItem } from '../api/types'
+import TodoItemVue from '../components/TodoItem.vue'
+import TodoInput from '@/components/TodoInput.vue'
 
 const data = ref<TodoItem[]>([])
-onMounted(async () => {
-  data.value = await getTodo()
+onMounted(() => {
+  fetch()
 })
+
+async function fetch() {
+  data.value = await getTodo()
+}
 </script>
 
 <template>
   <main>
-    <div v-for="item in data" :key="item.key[1]" class="todo-item">
-      <label class="todo-item__checkbox">
-        <input type="checkbox">
-        {{ item.value.title }}
-      </label>
-      <p class="todo-item__description">{{ item.value.description }}</p>
-      <hr>
-    </div>
+    <TodoInput @after-submit="fetch" />
+    <TodoItemVue
+      v-for="item in data"
+      :key="item.key[1]"
+      :id="item.key[1]"
+      :title="item.value.title"
+      :description="item.value.description"
+      @after-delete="fetch"
+    />
   </main>
 </template>
-
-<style>
-.todo-item__checkbox {
-  display: block;
-}
-</style>

@@ -15,3 +15,7 @@ if (import.meta.env.MODE === 'production') {
 <template>
   <RouterView />
 </template>
+
+<style lang="scss">
+@use './assets/style/index.scss';
+</style>

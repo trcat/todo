@@ -1,5 +1,5 @@
 import { storageKey } from '../utils'
-import type { TodoItem } from './types'
+import type { TodoData, TodoItem } from './types'
 
 function getDomain() {
   const mode = import.meta.env.MODE
@@ -27,6 +27,18 @@ async function fetchAPI(input: RequestInfo | URL, init?: RequestInit | undefined
 
 export async function getTodo(): Promise<TodoItem[]> {
   return fetchAPI(`${getDomain()}/todo`, { method: 'GET' })
+}
+
+export async function setTodo(data: TodoData): Promise<TodoItem[]> {
+  return fetchAPI(`${getDomain()}/todo`, { method: 'POST',  body: JSON.stringify(data) })
+}
+
+export async function deleteTodo(id: string): Promise<string> {
+  return fetchAPI(`${getDomain()}/todo/${id}`, { method: 'DELETE'})
+}
+
+export async function editTodo(data: TodoData): Promise<string> {
+  return fetchAPI(`${getDomain()}/todo/${data.id}`, { method: 'PUT',  body: JSON.stringify(data) }) 
 }
 
 export * from './types'
